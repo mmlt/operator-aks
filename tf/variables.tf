@@ -1,15 +1,23 @@
-variable "resource_group_name" {
-  description = "The Resource Group that contains all created resources."
+variable "env_domain" {
+  description = <<-ETX
+    Environment domain is the most significant part of the domain names that gets assigned to services
+    running in the cluster.
+    Format:
+      service.namespace.cluster_name.env_name.env_domain
+    service: the k8s service name
+    namespace: the k8s namespace of the service
+    cluster-name: see variable clusters
+    env_name: concatenation of region, cloud provider and env-type,
+    env_domain: rest incl TLD, for example; example.com
+  ETX
 }
 
 variable "env_name" {
-  //  TODO for globally unique resources we need something more unique (domain name)
-  description = <<-ETX
-    Environment name is used a prefix for resources and as part of the domain name of services running in the clusters.
-      format: app.namespace.cluster-name.<env-name>.subdomain
-      example: app.namespace.cluster-name.k8ss.example.com
-    Typically "k8s{data.azurerm_resource_group.env.tags[EnvironmentType]}"
-  ETX
+  description = "concatenation of region, cloud provider and env-type"
+}
+
+variable "resource_group_name" {
+  description = "The Resource Group that contains all created resources."
 }
 
 variable "vnet_cidr" {
@@ -45,7 +53,7 @@ variable "aad" {
 variable "clusters" {
   description = <<-ETX
     List of AKS clusters specs.
-      name: name of cluster, also used in domain name; app.namespace.<name>.env.subdomain
+      name: name of cluster, also used in domain name; app.namespace.<name>.env.domain
       subnet_num: subnet of vnet that is used by this cluster. Min: 1 Max: (vnet_cidr/subnet_cidr)-1
       version: kubernetes version
       scale: number of worker nodes

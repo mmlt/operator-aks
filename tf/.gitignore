@@ -1,6 +1,5 @@
 .profile
-terraform.tfstate
-terraform.tfstate.backup
-bnck-*.tfvars
-sx-*.tfvars
+*.tfstate
+*.tfstate.backup
+*.tfvars
 

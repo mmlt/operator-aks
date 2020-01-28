@@ -20,12 +20,7 @@ data "azurerm_resource_group" "env" {
   name = var.resource_group_name
 }
 
-//resource "azurerm_resource_group" "example" {
-//  name     = "${var.prefix}-anw-resources"
-//  location = "${var.location}"
-//}
-
-//resource "azurerm_route_table" "example" {
+//resource "azurerm_route_table" "???" {
 //  name                = "${var.prefix}-routetable"
 //  location            = "${azurerm_resource_group.example.location}"
 //  resource_group_name = "${azurerm_resource_group.example.name}"
@@ -57,7 +52,7 @@ resource "azurerm_subnet" "intlb" {
   //TODO  route_table_id = "${azurerm_route_table.example.id}"
 }
 
-//resource "azurerm_subnet_route_table_association" "example" {
+//resource "azurerm_subnet_route_table_association" "???" {
 //  subnet_id      = "${azurerm_subnet.example.id}"
 //  route_table_id = "${azurerm_route_table.example.id}"
 //}
@@ -88,8 +83,8 @@ resource "azurerm_role_assignment" "vnet-sp" {
 
 
 locals {
+  // Tags required by organisation policy.
   tags = {
-    // Organisation policy requires tag propagation.
     // Playground environments require the following tags:
     "FinancialWorkPackageId" = data.azurerm_resource_group.env.tags["FinancialWorkPackageId"]
     "Owner"                  = data.azurerm_resource_group.env.tags["Owner"]
@@ -99,6 +94,8 @@ locals {
     "Criticality"       = "Low"
     "EnvironmentType"   = "s"
   }
+
+  // VNet service provider credentials.
   vnet_sp_oauth = {
     client_id     = azuread_service_principal.vnet-sp.application_id
     client_secret = azuread_service_principal_password.vnet-sp.value
@@ -108,7 +105,7 @@ locals {
 // TODO Use for_each = var.clusters when it becomes available for modules.
 // In the mean time generate module instances.
 
-/*
+
 module "aks1" {
   source = "./modules/aks"
 
@@ -125,7 +122,7 @@ module "aks1" {
   vnet_sp_oauth = local.vnet_sp_oauth
   aad = var.aad
   tags = local.tags
-}*/
+}
 /*
 module "aks2" {
   source = "./modules/aks"
