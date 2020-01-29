@@ -2,7 +2,7 @@
 # Each AKS cluster get it's own subnet in the vnet.
 # https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html
 
-resource "azurerm_subnet" "test" {
+resource "azurerm_subnet" "this" {
   name                 = var.name
   resource_group_name  = var.resource_group.name
   address_prefix       = cidrsubnet(var.vnet.address_space[0], var.subnet_newbits, var.subnet_num)
@@ -13,7 +13,7 @@ resource "azurerm_subnet" "test" {
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
-  name                = var.name
+  name                = "${var.env_name}-${var.name}"
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
   dns_prefix          = "${var.env_name}-${var.name}"
@@ -37,7 +37,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     os_disk_size_gb = 30
 
     # Required for advanced networking
-    vnet_subnet_id = azurerm_subnet.test.id
+    vnet_subnet_id = azurerm_subnet.this.id
   }*/
 
   default_node_pool {
@@ -58,7 +58,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     #os_disk_size_gb
     #node_taints
 
-    vnet_subnet_id = azurerm_subnet.test.id
+    vnet_subnet_id = azurerm_subnet.this.id
   }
 
 

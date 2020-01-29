@@ -1,3 +1,4 @@
+//TODO decide between storage backend or file store. 
 //terraform {
 //  backend "s3" {
 //    key = "medium-terraform/prod/terraform.tfstate"
@@ -20,6 +21,8 @@ data "azurerm_resource_group" "env" {
   name = var.resource_group_name
 }
 
+
+//TODO add routes
 //resource "azurerm_route_table" "???" {
 //  name                = "${var.prefix}-routetable"
 //  location            = "${azurerm_resource_group.example.location}"
@@ -105,7 +108,6 @@ locals {
 // TODO Use for_each = var.clusters when it becomes available for modules.
 // In the mean time generate module instances.
 
-
 module "aks1" {
   source = "./modules/aks"
 
@@ -123,6 +125,7 @@ module "aks1" {
   aad = var.aad
   tags = local.tags
 }
+
 /*
 module "aks2" {
   source = "./modules/aks"
